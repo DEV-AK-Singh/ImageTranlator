@@ -18,7 +18,8 @@ LANGUAGE = {
 
 def translate_texts_array(text_array: List[str], source_lang: str = "hindi", target_lang: str = "english") -> List[str]: 
     prompt = (
-        f"Translate this exact text from {source_lang} to {target_lang} also do correction in the translation if possible. "
+        f"Translate this exact text from {source_lang} to {target_lang} also do correction of grammar and spelling in the translation in every word and sentence of each language if possible. "
+        f"Like in hindi translate this exact text to english. also hindi word should be a hindi word. also do correction of grammar and spelling in the translation in every word and sentence of each language if possible. "
         f"Preserve all numbers, names, and technical terms. "
         f"Return ONLY the translation, no explanations. "
         f"Return ONLY [original_text, translated_text] array of text. and length of the array should be same as text_array. Do not return any other text.\n\n"
@@ -54,7 +55,8 @@ def extract_text_from_image(input_path="input.png", output_path="output.png", la
     image_path = input_path
     img_data = cv2.imread(image_path)
     reader = easyocr.Reader(lang_list=languages, gpu=False)
-    detection_results = reader.readtext(img_data, text_threshold=0.01, link_threshold=0.01, width_ths=1.0, add_margin=0.1, contrast_ths=0.01, adjust_contrast=0.01) 
+    # detection_results = reader.readtext(img_data, text_threshold=0.01, link_threshold=0.01, width_ths=1.0, add_margin=0.1, contrast_ths=0.01, adjust_contrast=0.01) 
+    detection_results = reader.readtext(img_data) 
     detection_texts = [detection[1] for detection in detection_results] 
     print("detection_texts", len(detection_texts))
     if draw_texts: 
@@ -66,8 +68,8 @@ def extract_text_from_image(input_path="input.png", output_path="output.png", la
         return translations_texts
     return detection_texts
 
-if __name__ == "__main__": 
+# if __name__ == "__main__": 
     # detection_texts = extract_text_from_image("input.png", "output.png", ['en', 'hi'], False)
     # print(detection_texts)
-    translation_texts = extract_text_from_image("input.png", "output.png", ['en', 'hi'], True) 
+    # translation_texts = extract_text_from_image("input.png", "output.png", ['en', 'hi'], True) 
     # print(translation_texts)
